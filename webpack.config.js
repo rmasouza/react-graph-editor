@@ -92,10 +92,10 @@ const webpackConfig = {
             ],
         }),
         new CompressionPlugin(),
-        // new BundleAnalyzerPlugin({
-        //     analyzerMode: 'static',
-        //     openAnalyzer: false,
-        // }),
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            openAnalyzer: false,
+        }),
         new WebpackPwaManifest({
             name: 'React Graph Editor',
             short_name: 'React Graph Editor',
@@ -137,6 +137,7 @@ const webpackConfig = {
     },
     devServer: {
         compress: true,
+        port: process.env.PORT,
         before(app) {
             app.use(compression({}));
         },

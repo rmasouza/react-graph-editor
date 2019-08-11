@@ -10,16 +10,7 @@ const App: React.FC = () => {
         backgroundColor: 'aliceblue'
     }
     return (
-        <article>
-            <GraphView style={style}>
-                <GraphNode>
-                    1
-                </GraphNode>   
-                <GraphNode>
-                    2
-                </GraphNode>   
-            </GraphView>
-        </article>
+        <GraphView style={style}/>
     )
 };
 

@@ -1,14 +1,17 @@
-import React, {FC, PropsWithChildren, useState, CSSProperties, MouseEvent, unstable_Profiler, useRef} from 'react';
+import React, {FC, PropsWithChildren, useState, CSSProperties, MouseEvent, unstable_Profiler, useRef, useEffect} from 'react';
 import Position from '../models/Position';
 
 interface IGraphNodeProps {
-    height?: number,
-    width?: number,
+    initialPosition: Position;
+    index?: number;
+    parentHeight?: number,
+    parentWidth?: number,
 }
 
 export type GraphNodeProps = PropsWithChildren<IGraphNodeProps>;
 
 const GraphNode: FC<GraphNodeProps> = (props: GraphNodeProps) => {
+    const { initialPosition, index } = props;
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [offsetPosition, setOffsetPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState<boolean>(false);
@@ -24,8 +27,15 @@ const GraphNode: FC<GraphNodeProps> = (props: GraphNodeProps) => {
         backgroundColor: '#fff',
         width: 128,
         cursor: 'move'
-
     } 
+
+    useEffect(() => {
+        const tmp: Position = {
+            x: initialPosition.x, 
+            y: initialPosition.y,
+        }
+        setPosition(tmp)
+    }, [])
 
     const onMouseDawn = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
@@ -67,8 +77,8 @@ const GraphNode: FC<GraphNodeProps> = (props: GraphNodeProps) => {
         const y = offsetPosition.y + e.clientY;
 
         const tmpPosition: Position = {
-            x:  x > 0 ? Math.min(x, props.width!-itemRef.current!.offsetWidth) : Math.max(x, 0), 
-            y:  y > 0 ? Math.min(y, props!.height!-itemRef.current!.offsetHeight) : Math.max(y, 0),
+            x:  x > 0 ? Math.min(x, props.parentWidth!-itemRef.current!.offsetWidth) : Math.max(x, 0), 
+            y:  y > 0 ? Math.min(y, props!.parentHeight!-itemRef.current!.offsetHeight) : Math.max(y, 0),
         }
 
         setPosition(tmpPosition)
@@ -77,16 +87,16 @@ const GraphNode: FC<GraphNodeProps> = (props: GraphNodeProps) => {
     return (
         <div ref={itemRef} style={style} onMouseDown={onMouseDawn} onMouseUp={onMouseUp} onMouseMove={dragItem} onMouseLeave={onMouseLeave}>
             <div>{isDragging? 'SIM' : 'NAO'}</div>
-            {/* <div>OFFSET {JSON.stringify(offsetPosition)}</div> */}
-            <div>POSITION {JSON.stringify(position)}</div>
+            <div>Index {index}</div>
+            <div>Position {JSON.stringify(position)}</div>
             {props.children}
         </div>
     )
 }
 
 GraphNode.defaultProps = {
-    width: 0,
-    height: 0
+    parentWidth: 0,
+    parentHeight: 0
 }
 
 export default GraphNode;
