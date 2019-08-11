@@ -1,23 +1,19 @@
 import React, {FC, PropsWithChildren, useState, CSSProperties, MouseEvent, unstable_Profiler, useRef} from 'react';
-import { type } from 'os';
-import { bool } from 'prop-types';
-import { match } from 'minimatch';
+import Position from '../models/Position';
 
-interface IDraggableItemProps {
-    height: number,
-    width: number,
+interface IGraphNodeProps {
+    height?: number,
+    width?: number,
 }
-type DraggableItemProps = PropsWithChildren<IDraggableItemProps>
-type Position = { x: number, y: number }
-const DraggableItem: FC<DraggableItemProps> = (props: DraggableItemProps) => {
+
+export type GraphNodeProps = PropsWithChildren<IGraphNodeProps>;
+
+const GraphNode: FC<GraphNodeProps> = (props: GraphNodeProps) => {
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
     const [offsetPosition, setOffsetPosition] = useState<Position>({ x: 0, y: 0 });
     const [isDragging, setIsDragging] = useState<boolean>(false);
-    
-
     const itemRef  = useRef<HTMLDivElement>(null);
     
-
     const style: CSSProperties = {
         position: 'absolute',
         left: position.x,
@@ -71,8 +67,8 @@ const DraggableItem: FC<DraggableItemProps> = (props: DraggableItemProps) => {
         const y = offsetPosition.y + e.clientY;
 
         const tmpPosition: Position = {
-            x:  x > 0 ? Math.min(x, props.width-itemRef.current!.offsetWidth) : Math.max(x, 0), 
-            y:  y > 0 ? Math.min(y, props.height-itemRef.current!.offsetHeight) : Math.max(y, 0),
+            x:  x > 0 ? Math.min(x, props.width!-itemRef.current!.offsetWidth) : Math.max(x, 0), 
+            y:  y > 0 ? Math.min(y, props!.height!-itemRef.current!.offsetHeight) : Math.max(y, 0),
         }
 
         setPosition(tmpPosition)
@@ -88,4 +84,9 @@ const DraggableItem: FC<DraggableItemProps> = (props: DraggableItemProps) => {
     )
 }
 
-export default DraggableItem;
+GraphNode.defaultProps = {
+    width: 0,
+    height: 0
+}
+
+export default GraphNode;

@@ -1,5 +1,6 @@
 import React, { CSSProperties } from 'react';
-import DraggableItem from './components/DraggableItem';
+import GraphNode from './components/GraphNode';
+import GraphView from './components/GraphView';
 
 const App: React.FC = () => {
     const style: CSSProperties = {
@@ -9,14 +10,16 @@ const App: React.FC = () => {
         backgroundColor: 'aliceblue'
     }
     return (
-        <div style={style}>
-            <DraggableItem width={screen.availWidth} height={screen.availHeight}>
-                1
-            </DraggableItem>   
-            <DraggableItem width={screen.availWidth} height={screen.availHeight}>
-                2
-            </DraggableItem>   
-        </div>
+        <article>
+            <GraphView style={style}>
+                <GraphNode>
+                    1
+                </GraphNode>   
+                <GraphNode>
+                    2
+                </GraphNode>   
+            </GraphView>
+        </article>
     )
 };
 
